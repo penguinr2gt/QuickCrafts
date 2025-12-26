@@ -45,6 +45,7 @@ function addon.LOCAL_RU:GetData()
         
         [TEXT.OPT_AH_CUT] = "5% AH Cut",
         [TEXT.OPT_TRANSMUTE_MASTER] = "Transmute Master",
+        [TEXT.OPT_BUY_PIGMENTS] = "Purchase Pigments off AH",
         [TEXT.BTN_REFRESH] = "Refresh",
 
         --====================================================================

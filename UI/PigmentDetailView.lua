@@ -157,6 +157,28 @@ detailTitle:SetText("Pigment Name")
 detailTitle:SetTextColor(1, 0.82, 0)
 
 --============================================================================
+-- OPTIONS ROW (checkboxes)
+--============================================================================
+
+local optionsFrame = CreateFrame("Frame", nil, PigmentDetailFrame)
+optionsFrame:SetSize(490, 30)
+optionsFrame:SetPoint("TOP", 0, -25)
+
+local buyPigmentsCheck = CreateFrame("CheckButton", "QuickCraftsBuyPigments", optionsFrame, "UICheckButtonTemplate")
+buyPigmentsCheck:SetPoint("LEFT", backBtn, "RIGHT", 20, 0)
+buyPigmentsCheck:SetChecked(false)
+addon.UI.buyPigmentsCheck = buyPigmentsCheck
+
+local buyPigmentsLabel = optionsFrame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+buyPigmentsLabel:SetPoint("LEFT", buyPigmentsCheck, "RIGHT", 2, 0)
+buyPigmentsLabel:SetText(L(TEXT.OPT_BUY_PIGMENTS))
+
+buyPigmentsCheck:SetScript("OnClick", function(self)
+    addon:SetSetting("buyPigments", self:GetChecked())
+    addon.UI.UpdatePigmentDetailView()
+end)
+
+--============================================================================
 -- DYES SECTION
 --============================================================================
 
@@ -342,6 +364,10 @@ local function UpdatePigmentDetailView()
                 row.price = row.frame:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
                 row.price:SetPoint("RIGHT", -5, 0)
                 row.price:SetJustifyH("RIGHT")
+
+                row.profit = row.frame:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+                row.profit:SetPoint("RIGHT", row.price, "LEFT", -15, 0)
+                row.profit:SetJustifyH("RIGHT")
             end
             
             local row = dyeRows[i]
@@ -352,6 +378,7 @@ local function UpdatePigmentDetailView()
             -- Use item link for hover tooltips
             row.name:SetText(addon.PriceSource:GetItemDisplayText(dye.itemID, dye.name))
             
+            -- Calculates price text that is shown
             if price then
                 row.price:SetText(addon.Calculator:FormatGoldCompact(price))
                 if isBest then
@@ -365,6 +392,30 @@ local function UpdatePigmentDetailView()
                 row.price:SetText("|cFF888888N/A|r")
                 row.highlight:Hide()
             end
+
+            -- Calculates profit text that is shown
+            local pigmentCost = nil
+            if addon:GetSetting("buyPigments") then
+                pigmentCost = addon.PriceSource:GetPrice(pigment.itemID)
+            else
+                pigmentCost = data.totalCost
+            end
+
+            if price and pigmentCost then
+                local saleAfterAHCut = price
+                -- If auction house cut is enabled, include in calculation
+                if addon:GetSetting("ahCut") then
+                    saleAfterAHCut = math.floor(price * 0.95)
+                end
+                local dyeProfit = saleAfterAHCut - pigmentCost
+                row.profit:SetText(addon.Calculator:FormatProfit(dyeProfit))
+            -- If you do not have an AH price for the pigment
+            elseif addon:GetSetting("buyPigments") and not pigmentCost then
+                row.profit:SetText("|cFF888888N/A|r")
+            else
+                row.profit:SetText("")
+            end
+
             
             dyeYOffset = dyeYOffset + 24
         end
@@ -541,6 +592,9 @@ addon.UI.UpdatePigmentDetailView = UpdatePigmentDetailView
 local function ShowPigmentDetailView(pigmentID)
     currentPigmentID = pigmentID
     
+    -- Load checkbox(s) states
+    buyPigmentsCheck:SetChecked(addon:GetSetting("buyPigments"))
+
     -- Recalculate data for this pigment
     local pigment = addon:GetPigmentByID(pigmentID)
     if pigment then

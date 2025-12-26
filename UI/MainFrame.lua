@@ -12,6 +12,7 @@ local TEXT = addon.CONST.TEXT
 --============================================================================
 
 local MainFrame = CreateFrame("Frame", "QuickCraftsFrame", UIParent, "BackdropTemplate")
+MainFrame:SetFrameStrata("HIGH") -- setting frame to high to show above other panels
 MainFrame:SetSize(530, 500)
 MainFrame:SetPoint("CENTER")
 MainFrame:SetMovable(true)
@@ -205,7 +206,9 @@ end)
 -- SHOW/HIDE HANDLERS
 --============================================================================
 
-MainFrame:SetScript("OnShow", function()
+MainFrame:SetScript("OnShow", function(self)
+    -- Also raising frame incase "HIGH" strata does not work 
+    self:Raise()
     -- Load settings into checkboxes
     if addon.UI.ahCutCheck then
         addon.UI.ahCutCheck:SetChecked(addon:GetSetting("ahCut"))

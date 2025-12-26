@@ -31,6 +31,7 @@ addon.pigmentData = {}
 addon.defaults = {
     ahCut = true,           -- Deduct 5% AH cut from sale price
     mastery = false,        -- Transmute Mastery enabled
+    buyPigments = false,    -- Buy Pigments or Craft Pigments with Herbs (Player Housing Dyes)
     history = {},           -- Price history
     windowPosition = nil,   
     lastTab = "pigments", 
