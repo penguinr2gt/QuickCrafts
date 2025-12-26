@@ -31,6 +31,7 @@ addon.CONST.TEXT = {
     -- Options
     OPT_AH_CUT = "OPT_AH_CUT",
     OPT_TRANSMUTE_MASTER = "OPT_TRANSMUTE_MASTER",
+    OPT_BUY_PIGMENTS = "OPT_BUY_PIGMENTS",
     BTN_REFRESH = "BTN_REFRESH",
 
     -- Refresh Button Tooltip
