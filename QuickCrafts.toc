@@ -2,7 +2,7 @@
 ## Title: QuickCrafts
 ## Notes: Calculates various crafting profits using Auctionator prices. Type /calc to open.
 ## Author: Penguinr2gt
-## Version: 0.0.3
+## Version: 0.0.4
 ## Dependencies: Auctionator
 ## SavedVariables: QuickCraftsDB
 
