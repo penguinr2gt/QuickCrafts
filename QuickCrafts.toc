@@ -1,4 +1,4 @@
-## Interface: 110207
+## Interface: 110207, 120000, 120001
 ## Title: QuickCrafts
 ## Notes: Calculates various crafting profits using Auctionator prices. Type /calc to open.
 ## Author: Penguinr2gt
