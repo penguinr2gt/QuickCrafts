@@ -27,12 +27,6 @@ return {
         [TEXT.HELP_CMD_HELP] = "/calc help - Mostrar este mensaje de ayuda",
 
         --====================================================================
-        -- MAIN TITLE (not sure if this one should be translated)
-        --====================================================================
-        
-        [TEXT.WINDOW_TITLE] = "QuickCrafts",
-
-        --====================================================================
         -- TAB NAMES
         --====================================================================
         
@@ -120,7 +114,7 @@ return {
         [TEXT.TOTAL_MATERIAL_COST] = "Costo total de materiales:",
         [TEXT.EFFECTIVE_COST_MASTERY] = "Costo efectivo (con maestría):",
         [TEXT.SALE_AFTER_CUT] = "Venta (tras comisión):",
-        [TEXT.PROFIT_COLON] = "GANANCIA",
+        [TEXT.PROFIT_COLON] = "GANANCIA:",
         [TEXT.MARGIN_SUFFIX] = "margen",
 
         --====================================================================

@@ -76,7 +76,7 @@ end)
 --============================================================================
 
 local detailContent = CreateFrame("Frame", nil, DetailFrame)
-detailContent:SetSize(480, 380)
+detailContent:SetSize(520, 700)
 detailContent:SetPoint("TOP", 0, -55)
 
 --============================================================================
@@ -149,7 +149,7 @@ productPrice:SetText("0g")
 -- Separator
 local detailSep2 = detailContent:CreateTexture(nil, "ARTWORK")
 detailSep2:SetColorTexture(0.5, 0.5, 0.5, 0.5)
-detailSep2:SetSize(440, 1)
+detailSep2:SetSize(510, 1)
 detailSep2:SetPoint("TOP", 0, -225)
 
 -- Total Material Cost

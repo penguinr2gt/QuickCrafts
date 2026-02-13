@@ -21,9 +21,6 @@ addon.CONST.TEXT = {
     HELP_CMD_CALC = "HELP_CMD_CALC",
     HELP_CMD_HELP = "HELP_CMD_HELP",
 
-    -- Main Window
-    WINDOW_TITLE = "WINDOW_TITLE",
-
     -- Tab Names
     TAB_PIGMENTS = "TAB_PIGMENTS",
     TAB_TRANSMUTES = "TAB_TRANSMUTES",

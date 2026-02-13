@@ -13,7 +13,7 @@ local TEXT = addon.CONST.TEXT
 
 local MainFrame = CreateFrame("Frame", "QuickCraftsFrame", UIParent, "BackdropTemplate")
 MainFrame:SetFrameStrata("HIGH") -- setting frame to high to show above other panels
-MainFrame:SetSize(530, 500)
+MainFrame:SetSize(600, 500)
 MainFrame:SetPoint("CENTER")
 MainFrame:SetMovable(true)
 MainFrame:EnableMouse(true)
@@ -47,7 +47,7 @@ titleBg:SetPoint("TOP", 0, 12)
 
 local titleText = MainFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 titleText:SetPoint("TOP", 0, 0)
-titleText:SetText(L(TEXT.WINDOW_TITLE))
+titleText:SetText("QuickCrafts")
 titleText:SetTextColor(1, 0.82, 0)
 
 addon.UI.TitleText = titleText

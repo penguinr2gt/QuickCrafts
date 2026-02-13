@@ -84,7 +84,7 @@ end)
 
 if AddonCompartmentFrame and AddonCompartmentFrame.RegisterAddon then
     AddonCompartmentFrame:RegisterAddon({
-        text = L(TEXT.WINDOW_TITLE),
+        text = "QuickCrafts",
         icon = "Interface\\Icons\\INV_Misc_StoneTablet_04",
         notCheckable = true,
         func = function()

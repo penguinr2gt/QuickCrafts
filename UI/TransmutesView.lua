@@ -19,7 +19,7 @@ addon.UI.TransmutesFrame = TransmutesFrame
 --============================================================================
 
 local optionsFrame = CreateFrame("Frame", nil, TransmutesFrame)
-optionsFrame:SetSize(490, 30)
+optionsFrame:SetSize(560, 30)
 optionsFrame:SetPoint("TOP", 0, -25)
 
 local ahCutCheck = CreateFrame("CheckButton", "QuickCraftsAHCut", optionsFrame, "UICheckButtonTemplate")
@@ -32,7 +32,7 @@ ahCutLabel:SetPoint("LEFT", ahCutCheck, "RIGHT", 2, 0)
 ahCutLabel:SetText(L(TEXT.OPT_AH_CUT))
 
 local masteryCheck = CreateFrame("CheckButton", "QuickCraftsMastery", optionsFrame, "UICheckButtonTemplate")
-masteryCheck:SetPoint("LEFT", 120, 0)
+masteryCheck:SetPoint("LEFT", 200, 0)
 masteryCheck:SetChecked(false)
 addon.UI.masteryCheck = masteryCheck
 
@@ -62,7 +62,7 @@ end)
 --============================================================================
 
 local headerFrame = CreateFrame("Frame", nil, TransmutesFrame)
-headerFrame:SetSize(490, 20)
+headerFrame:SetSize(560, 20)
 headerFrame:SetPoint("TOP", optionsFrame, "BOTTOM", 0, -5)
 
 local headerName = headerFrame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
@@ -83,7 +83,7 @@ headerProfit:SetText("|cFFAAAACC" .. L(TEXT.HEADER_PROFIT) .. "|r")
 
 local headerSep = TransmutesFrame:CreateTexture(nil, "ARTWORK")
 headerSep:SetColorTexture(0.5, 0.5, 0.5, 0.5)
-headerSep:SetSize(480, 1)
+headerSep:SetSize(550, 1)
 headerSep:SetPoint("TOP", headerFrame, "BOTTOM", 0, -2)
 
 --============================================================================
@@ -95,7 +95,7 @@ addon.UI.recipeRows = recipeRows
 
 local function CreateRecipeRow(index, recipe)
     local row = CreateFrame("Button", nil, TransmutesFrame)
-    row:SetSize(490, 36)
+    row:SetSize(560, 36)
     row:SetPoint("TOP", headerSep, "BOTTOM", 0, -5 - ((index - 1) * 38))
     
     row:SetHighlightTexture("Interface\\QuestFrame\\UI-QuestTitleHighlight", "ADD")
@@ -110,7 +110,8 @@ local function CreateRecipeRow(index, recipe)
     row.nameText:SetPoint("LEFT", 50, 0)
     row.nameText:SetWidth(140)
     row.nameText:SetJustifyH("LEFT")
-    row.nameText:SetText(recipe.name)
+    --row.nameText:SetText(recipe.name)
+    row.nameText:SetText(addon.PriceSource:GetItemDisplayText(recipe.product.itemID, recipe.name))
     
     -- Cost
     row.costText = row:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
@@ -141,7 +142,8 @@ local function CreateRecipeRow(index, recipe)
     -- Tooltip on hover
     row:SetScript("OnEnter", function(self)
         GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-        GameTooltip:AddLine(recipe.name, 1, 0.82, 0)
+        local displayName = addon.PriceSource:GetItemDisplayText(recipe.product.itemID, recipe.name)
+        GameTooltip:AddLine(displayName, 1, 0.82, 0)
         GameTooltip:AddLine(L(TEXT.CLICK_FOR_DETAILS), 0.7, 0.7, 0.7)
         GameTooltip:Show()
     end)
@@ -196,6 +198,7 @@ local function UpdateTransmutesView()
         if row and data then
             -- Update icon
             row.icon:SetTexture(addon.PriceSource:GetItemIcon(recipe.product.itemID))
+            row.nameText:SetText(addon.PriceSource:GetItemDisplayText(recipe.product.itemID, recipe.name))
             
             -- Update cost (show effective cost if mastery enabled)
             if data.hasAllPrices then

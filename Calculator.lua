@@ -9,7 +9,10 @@ local addonName, addon = ...
 -- FORMATTING FUNCTIONS
 --============================================================================
 
--- Format copper to gold string with colors (e.g., "125g 50s 25c")
+local GOLD_COIN = "|TInterface\\MoneyFrame\\UI-GoldIcon:0|t"
+local SILVER_COIN = "|TInterface\\MoneyFrame\\UI-SilverIcon:0|t"
+local COPPER_COIN = "|TInterface\\MoneyFrame\\UI-CopperIcon:0|t"
+
 function addon.Calculator:FormatGold(copper)
     if not copper or copper == 0 then 
         return "|cFF888888N/A|r" 
@@ -24,12 +27,12 @@ function addon.Calculator:FormatGold(copper)
     
     local str = ""
     if gold > 0 then
-        str = string.format("|cFFFFD700%d|rg ", gold)
+        str = string.format("|cFFFFD700%d|r %s ", gold, GOLD_COIN)
     end
     if silver > 0 or gold > 0 then
-        str = str .. string.format("|cFFC0C0C0%d|rs ", silver)
+        str = str .. string.format("|cFFC0C0C0%d|r %s ", silver, SILVER_COIN)
     end
-    str = str .. string.format("|cFFB87333%d|rc", copperVal)
+    str = str .. string.format("|cFFB87333%d|r %s", copperVal, COPPER_COIN)
     
     if negative then
         str = "|cFFFF0000-|r" .. str
@@ -38,13 +41,32 @@ function addon.Calculator:FormatGold(copper)
     return str
 end
 
--- Format copper to compact gold string (e.g., "125.5g")
+-- Format copper to compact gold string
 function addon.Calculator:FormatGoldCompact(copper)
     if not copper or copper == 0 then 
         return "N/A" 
     end
-    local gold = copper / 10000
-    return string.format("%.1fg", gold)
+    local absCopper = math.abs(copper)
+    local gold = math.floor(absCopper / 10000)
+    local silver = math.floor((absCopper % 10000) / 100)
+    
+    local str = ""
+    
+    if gold > 0 then
+        -- Round silver to single decimal (0-9)
+        local decimalPart = math.floor(silver / 10)
+        if decimalPart > 0 then
+            str = string.format("%d.%d %s", gold, decimalPart, GOLD_COIN)
+        else
+            str = string.format("%d %s", gold, GOLD_COIN)
+        end
+    elseif silver > 0 then
+        str = string.format("%d %s", silver, SILVER_COIN)
+    else
+        str = string.format("%d %s", absCopper, COPPER_COIN)
+    end
+    
+    return str
 end
 
 -- Format profit with color (green positive, red negative)
@@ -52,10 +74,11 @@ function addon.Calculator:FormatProfit(copper)
     if not copper then 
         return "|cFF888888N/A|r" 
     end
+    local formatted = self:FormatGoldCompact(math.abs(copper))
     if copper >= 0 then
-        return "|cFF00FF00+" .. self:FormatGoldCompact(copper) .. "|r"
+        return "|cFF00FF00+" .. formatted .. "|r"
     else
-        return "|cFFFF0000" .. self:FormatGoldCompact(copper) .. "|r"
+        return "|cFFFF0000-" .. formatted .. "|r"
     end
 end
 

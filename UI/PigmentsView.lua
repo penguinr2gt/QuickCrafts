@@ -23,7 +23,7 @@ addon.UI.PigmentsFrame = PigmentsFrame
 --============================================================================
 
 local optionsFrame = CreateFrame("Frame", nil, PigmentsFrame)
-optionsFrame:SetSize(490, 30)
+optionsFrame:SetSize(560, 30)
 optionsFrame:SetPoint("TOP", 0, -25)
 
 -- AH Cut checkbox (shared setting with transmutes)
@@ -38,7 +38,7 @@ ahCutLabel:SetText(L(TEXT.OPT_AH_CUT))
 
 -- Refresh button
 local refreshBtn = CreateFrame("Button", nil, optionsFrame, "UIPanelButtonTemplate")
-refreshBtn:SetSize(60, 20)
+refreshBtn:SetSize(70, 22)
 refreshBtn:SetPoint("RIGHT", -10, 0)
 refreshBtn:SetText(L(TEXT.BTN_REFRESH))
 
@@ -59,7 +59,7 @@ end)
 --============================================================================
 
 local headerFrame = CreateFrame("Frame", nil, PigmentsFrame)
-headerFrame:SetSize(490, 20)
+headerFrame:SetSize(560, 20)
 headerFrame:SetPoint("TOP", optionsFrame, "BOTTOM", 0, -5)
 
 local headerName = headerFrame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
@@ -80,7 +80,7 @@ headerProfit:SetText("|cFFAAAACC" .. L(TEXT.HEADER_PROFIT) .. "|r")
 
 local headerSep = PigmentsFrame:CreateTexture(nil, "ARTWORK")
 headerSep:SetColorTexture(0.5, 0.5, 0.5, 0.5)
-headerSep:SetSize(480, 1)
+headerSep:SetSize(550, 1)
 headerSep:SetPoint("TOP", headerFrame, "BOTTOM", 0, -2)
 
 --============================================================================
@@ -88,11 +88,11 @@ headerSep:SetPoint("TOP", headerFrame, "BOTTOM", 0, -2)
 --============================================================================
 
 local scrollFrame = CreateFrame("ScrollFrame", nil, PigmentsFrame, "UIPanelScrollFrameTemplate")
-scrollFrame:SetSize(470, 330)  -- Wider and account for bottom tabs
+scrollFrame:SetSize(540, 350)  -- Wider and account for bottom tabs
 scrollFrame:SetPoint("TOP", headerSep, "BOTTOM", -10, -5)
 
 local scrollContent = CreateFrame("Frame", nil, scrollFrame)
-scrollContent:SetSize(450, 1) -- Height will be set dynamically
+scrollContent:SetSize(520, 1) -- Height will be set dynamically
 scrollFrame:SetScrollChild(scrollContent)
 
 --============================================================================
@@ -105,7 +105,7 @@ addon.UI.pigmentRows = pigmentRows
 -- Create a single pigment row
 local function CreatePigmentRow(index, pigment)
     local row = CreateFrame("Button", nil, scrollContent)
-    row:SetSize(460, 40)
+    row:SetSize(530, 40)
     row:SetPoint("TOP", scrollContent, "TOP", 0, -((index - 1) * 42))
     
     -- Highlight on hover
@@ -121,8 +121,8 @@ local function CreatePigmentRow(index, pigment)
     row.nameText:SetPoint("LEFT", 42, 0)
     row.nameText:SetWidth(100)
     row.nameText:SetJustifyH("LEFT")
-    -- Shorten name: "Brown Dye Pigment" -> "Brown"
-    local shortName = pigment.name:gsub(" Dye Pigment", "")
+    -- Shorten name: "Brown Dye Pigment" -> "Brown" using localized display name
+    local shortName = (addon.PriceSource:GetItemDisplayText(pigment.itemID, pigment.name)):gsub(" Dye Pigment", "")
     row.nameText:SetText(shortName)
     
     -- Cheapest herb icon
@@ -180,7 +180,7 @@ local function CreatePigmentRow(index, pigment)
     -- Tooltip on hover
     row:SetScript("OnEnter", function(self)
         GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-        GameTooltip:AddLine(pigment.name, 1, 0.82, 0)
+        GameTooltip:AddLine(addon.PriceSource:GetItemDisplayText(pigment.itemID, pigment.name), 1, 0.82, 0)
         GameTooltip:AddLine(string.format(L(TEXT.REQUIRES_HERBS), pigment.herbCost or 10), 1, 1, 1)
         
         local data = addon.pigmentData[pigment.id]
@@ -188,15 +188,15 @@ local function CreatePigmentRow(index, pigment)
             if data.cheapestHerb then
                 GameTooltip:AddLine(" ")
                 GameTooltip:AddLine(L(TEXT.CHEAPEST_HERB_LABEL), 0.5, 1, 0.5)
-                GameTooltip:AddDoubleLine("  " .. data.cheapestHerb.name, 
+                GameTooltip:AddDoubleLine("  " .. addon.PriceSource:GetItemDisplayText(data.cheapestHerb.itemID, data.cheapestHerb.name), 
                     addon.Calculator:FormatGoldCompact(data.cheapestHerb.price) .. " each", 
                     1, 1, 1, 1, 1, 1)
             end
-            
+
             if data.bestDye then
                 GameTooltip:AddLine(" ")
                 GameTooltip:AddLine(L(TEXT.BEST_DYE_LABEL), 1, 0.5, 1)
-                GameTooltip:AddDoubleLine("  " .. data.bestDye.name,
+                GameTooltip:AddDoubleLine("  " .. addon.PriceSource:GetItemDisplayText(data.bestDye.itemID, data.bestDye.name),
                     addon.Calculator:FormatGoldCompact(data.bestDye.price),
                     1, 1, 1, 1, 1, 1)
                 if data.dyeProfit then
@@ -298,11 +298,9 @@ local function UpdatePigmentsView()
                 row.herbIcon:SetTexture(addon.PriceSource:GetItemIcon(data.cheapestHerb.itemID))
                 row.herbIcon:Show()
                 -- Shorten herb name if needed
-                local herbName = data.cheapestHerb.name
-                if #herbName > 12 then
-                    herbName = herbName:sub(1, 11) .. "..."
-                end
-                row.herbText:SetText(herbName)
+                local herbName = addon.PriceSource:GetItemDisplayText(data.cheapestHerb.itemID, data.cheapestHerb.name)
+                local displayName = addon.Utils.TruncateWithQuality(herbName, 20)
+                row.herbText:SetText(displayName)
                 row.herbPriceText:SetText(addon.Calculator:FormatGoldCompact(data.cheapestHerb.price) .. " " .. L(TEXT.EACH_ABBREV))
             else
                 row.herbIcon:SetTexture("Interface\\Icons\\INV_Misc_QuestionMark")
@@ -314,12 +312,10 @@ local function UpdatePigmentsView()
             if data.bestDye then
                 row.dyeIcon:SetTexture(addon.PriceSource:GetItemIcon(data.bestDye.itemID))
                 row.dyeIcon:Show()
-                -- Shorten dye name - remove "Dye" suffix
-                local dyeName = data.bestDye.name:gsub(" Dye$", "")
-                if #dyeName > 10 then
-                    dyeName = dyeName:sub(1, 9) .. "..."
-                end
-                row.dyeText:SetText(dyeName)
+                -- Shorten dye name - remove "Dye" suffix (if english)
+                local dyeName = (addon.PriceSource:GetItemDisplayText(data.bestDye.itemID, data.bestDye.name)):gsub(" Dye$", "")
+                local displayDyeName = addon.Utils.TruncateWithQuality(dyeName, 20)
+                row.dyeText:SetText(displayDyeName)
                 row.dyePriceText:SetText(addon.Calculator:FormatGoldCompact(data.bestDye.price))
             else
                 row.dyeIcon:SetTexture("Interface\\Icons\\INV_Misc_QuestionMark")

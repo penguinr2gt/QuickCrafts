@@ -27,12 +27,6 @@ function addon.LOCAL_RU:GetData()
         [TEXT.HELP_CMD_HELP] = "/calc help - Show this help message",
 
         --====================================================================
-        -- MAIN TITLE (not sure if this one should be translated)
-        --====================================================================
-        
-        [TEXT.WINDOW_TITLE] = "QuickCrafts",
-
-        --====================================================================
         -- TAB NAMES
         --====================================================================
         

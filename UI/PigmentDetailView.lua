@@ -122,11 +122,11 @@ end)
 --============================================================================
 
 local mainScrollFrame = CreateFrame("ScrollFrame", nil, PigmentDetailFrame, "UIPanelScrollFrameTemplate")
-mainScrollFrame:SetSize(470, 380)
+mainScrollFrame:SetSize(540, 380)
 mainScrollFrame:SetPoint("TOP", 0, -55)
 
 local detailContent = CreateFrame("Frame", nil, mainScrollFrame)
-detailContent:SetSize(450, 700)
+detailContent:SetSize(520, 700)
 mainScrollFrame:SetScrollChild(detailContent)
 
 -- Enable hyperlinks for item tooltips
@@ -161,7 +161,7 @@ detailTitle:SetTextColor(1, 0.82, 0)
 --============================================================================
 
 local optionsFrame = CreateFrame("Frame", nil, PigmentDetailFrame)
-optionsFrame:SetSize(490, 30)
+optionsFrame:SetSize(560, 30)
 optionsFrame:SetPoint("TOP", 0, -25)
 
 local buyPigmentsCheck = CreateFrame("CheckButton", "QuickCraftsBuyPigments", optionsFrame, "UICheckButtonTemplate")
@@ -188,7 +188,7 @@ dyesHeader:SetText("|cFFDA70D6" .. L(TEXT.SECTION_CRAFTABLE_DYES) .. "|r " .. L(
 
 -- Container for dye rows
 local dyeContainer = CreateFrame("Frame", nil, detailContent)
-dyeContainer:SetSize(420, 1)
+dyeContainer:SetSize(490, 1)
 dyeContainer:SetPoint("TOPLEFT", 15, -55)
 local dyeRows = {}
 
@@ -202,7 +202,7 @@ herbsHeader:SetText("|cFF00FF00" .. L(TEXT.SECTION_AVAILABLE_HERBS) .. "|r " .. 
 
 -- Container for herb rows
 local herbContainer = CreateFrame("Frame", nil, detailContent)
-herbContainer:SetSize(420, 1)
+herbContainer:SetSize(490, 1)
 herbContainer:SetPoint("TOPLEFT", 15, -220)
 
 local herbRows = {}
@@ -217,7 +217,7 @@ summaryHeader:SetText("|cFFFFCC00" .. L(TEXT.SECTION_SUMMARY) .. "|r")
 
 local summarySep = detailContent:CreateTexture(nil, "ARTWORK")
 summarySep:SetColorTexture(0.5, 0.5, 0.5, 0.5)
-summarySep:SetSize(420, 1)
+summarySep:SetSize(490, 1)
 summarySep:SetPoint("TOPLEFT", summaryHeader, "BOTTOMLEFT", 0, -5)
 
 -- Cheapest Herb
@@ -227,7 +227,7 @@ cheapestHerbLabel:SetText(L(TEXT.CHEAPEST_HERB))
 
 local cheapestHerbValue = detailContent:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
 cheapestHerbValue:SetPoint("LEFT", cheapestHerbLabel, "RIGHT", 10, 0)
-cheapestHerbValue:SetWidth(280)
+cheapestHerbValue:SetWidth(350)
 cheapestHerbValue:SetJustifyH("LEFT")
 
 -- Total Cost
@@ -245,7 +245,7 @@ bestDyeLabel:SetText(L(TEXT.BEST_DYE))
 
 local bestDyeValue = detailContent:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
 bestDyeValue:SetPoint("LEFT", bestDyeLabel, "RIGHT", 10, 0)
-bestDyeValue:SetWidth(280)
+bestDyeValue:SetWidth(350)
 bestDyeValue:SetJustifyH("LEFT")
 
 -- Dye Sale Price
@@ -262,7 +262,7 @@ dyeSaleValue:SetPoint("LEFT", dyeSaleLabel, "RIGHT", 10, 0)
 
 local profitSep = detailContent:CreateTexture(nil, "ARTWORK")
 profitSep:SetColorTexture(0.3, 0.6, 0.3, 0.8)
-profitSep:SetSize(420, 1)
+profitSep:SetSize(490, 1)
 profitSep:SetPoint("TOPLEFT", dyeSaleLabel, "BOTTOMLEFT", 0, -15)
 
 local profitLabel = detailContent:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
@@ -301,7 +301,7 @@ local function UpdatePigmentDetailView()
     local dyeCount = 0
     
     if dyeGroup and dyeGroup.dyes and #dyeGroup.dyes > 0 then
-        dyesHeader:SetText("|cFFDA70D6Craftable Dyes|r (most expensive highlighted)")
+        dyesHeader:SetText("|cFFDA70D6" .. L(TEXT.SECTION_CRAFTABLE_DYES) .. "|r " .. L(TEXT.SECTION_DYES_HIGHLIGHT))
         
         local sortedDyes = {}
         for _, dye in ipairs(dyeGroup.dyes) do
@@ -331,7 +331,7 @@ local function UpdatePigmentDetailView()
                     frame = CreateFrame("Frame", nil, dyeContainer),
                 }
                 local row = dyeRows[i]
-                row.frame:SetSize(420, 24)
+                row.frame:SetSize(500, 22)
 
                 -- tooltips added
                 row.frame:EnableMouse(true)
@@ -358,7 +358,7 @@ local function UpdatePigmentDetailView()
                 
                 row.name = row.frame:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
                 row.name:SetPoint("LEFT", 30, 0)
-                row.name:SetWidth(280)
+                row.name:SetWidth(350)
                 row.name:SetJustifyH("LEFT")
                 
                 row.price = row.frame:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
@@ -462,7 +462,7 @@ local function UpdatePigmentDetailView()
                 frame = CreateFrame("Frame", nil, herbContainer),
             }
             local row = herbRows[i]
-            row.frame:SetSize(420, 22)
+            row.frame:SetSize(500, 24)
 
             -- tooltips added
             row.frame:EnableMouse(true)
@@ -487,12 +487,12 @@ local function UpdatePigmentDetailView()
             row.icon:SetSize(18, 18)
             row.icon:SetPoint("LEFT", 5, 0)
             
-            row.name = row.frame:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+            row.name = row.frame:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
             row.name:SetPoint("LEFT", 28, 0)
-            row.name:SetWidth(280)
+            row.name:SetWidth(350)
             row.name:SetJustifyH("LEFT")
             
-            row.price = row.frame:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+            row.price = row.frame:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
             row.price:SetPoint("RIGHT", -5, 0)
             row.price:SetJustifyH("RIGHT")
         end
